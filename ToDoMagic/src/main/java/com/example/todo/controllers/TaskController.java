@@ -1,23 +1,28 @@
 package com.example.todo.controllers;
 
-import com.example.todo.entity.Task;
-import com.example.todo.repository.TaskRepository;
-import com.example.todo.service.TaskService;
-import com.example.todo.service.TodoListService;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import com.example.todo.entity.Task;
+import com.example.todo.repository.TaskRepository;
+import com.example.todo.service.TaskService;
+import com.example.todo.service.TodoListService;
 
 @Controller
 @RequestMapping(path = "/")
@@ -48,7 +53,7 @@ public class TaskController {
     }
 
 
-    // Измененный метод для обработки JSON данных
+    // Это метод для обработки JSON данных
 
     @PostMapping("/task")
     public String handleTaskRequest(@RequestBody Task task,
@@ -96,17 +101,10 @@ public class TaskController {
     public String showSearchTasksPage() {
         return "searchTasks";
     }
-    /*  @GetMapping("/searchTasks.html")
-    public String showSearchTasksPage1() {
-        return "searchTasks"; // Возвращает имя шаблона (например, без расширения .html)
-    }*/
-
-
-
-
-    @GetMapping("/search")
+   
+ @GetMapping("/search")
     public String searchPage() {
-        return "search_results"; // Возвращает страницу search_results.html
+        return "searchTasks"; // Возвращает страницу search_results.html
     }
 
     @PostMapping("/api/searchTasks")
@@ -125,12 +123,11 @@ public class TaskController {
             return ResponseEntity.badRequest().body(null);
         }
     }
-
     @RequestMapping(value = {"/searchTasks.html", "/searchTasks"}, method = {RequestMethod.GET, RequestMethod.POST})
     public String searchTasksPage(@RequestParam(required = false, defaultValue = "") String searchQuery, Model model) {
         if (searchQuery.isEmpty()) {
             model.addAttribute("error", "Параметр поискового запроса обязателен");
-            return "search_results"; // Возвращает страницу search_results.html с сообщением об ошибке
+            return "searchTasks"; // Возвращает страницу с формой, если запрос пустой
         }
 
         try {
@@ -145,19 +142,7 @@ public class TaskController {
             model.addAttribute("error", "Ошибка поиска задач: " + e.getMessage());
         }
 
-        return "search_results"; // Возвращает страницу search_results.html с результатами поиска
+        return "search_results"; // Возвращает страницу searchResults.html с результатами поиска
     }
 }
- /* @PostMapping("/searchTasks")
-    public ResponseEntity<?> searchTasks(@RequestParam(required = true, defaultValue = "") String searchQuery) {
-        if (searchQuery.isEmpty()) {
-            return ResponseEntity.badRequest().body("Параметр поискового запроса обязателен");
-        }
 
-        try {
-            List<Task> searchResults = todoListService.searchTasks(searchQuery);
-            return ResponseEntity.ok(searchResults);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ошибка поиска задач: " + e.getMessage());
-        }
-    }*/

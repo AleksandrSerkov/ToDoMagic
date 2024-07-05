@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,13 +8,26 @@
 <body>
 <h1>Результаты поиска задач</h1>
 
-<ul>
-    <li>Задача 1: Описание задачи 1</li>
-    <li>Задача 2: Описание задачи 2</li>
-    <li>Задача 3: Описание задачи 3</li>
-    <!-- Добавь здесь нужное количество элементов для отображения результатов поиска -->
-</ul>
+<!-- Проверяем, есть ли результаты поиска -->
+<div th:if="${searchResults != null}">
+    <ul>
+        <!-- Перебираем и отображаем каждую задачу -->
+        <li th:each="task : ${searchResults}">
+            <p><strong>Имя задачи:</strong> <span th:text="${task.name}"></span></p>
+            <p><strong>Описание:</strong> <span th:text="${task.description}"></span></p>
+            <p><strong>Дата создания:</strong> <span th:text="${#temporals.format(task.createdAt, 'dd-MM-yyyy HH:mm:ss')}"></span></p>
+            <hr/>
+        </li>
+    </ul>
+</div>
+
+<!-- Если результатов нет, отображаем сообщение об ошибке -->
+<div th:if="${error != null}">
+    <p th:text="${error}"></p>
+</div>
 
 <p><a href="/search">Назад к поиску</a></p>
 </body>
 </html>
+
+
