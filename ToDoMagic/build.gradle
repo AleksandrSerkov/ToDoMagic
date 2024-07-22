@@ -1,7 +1,7 @@
 plugins {
-   id 'org.springframework.boot' version '3.3.1'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
+    id 'org.springframework.boot' version '3.2.5'
+    id 'io.spring.dependency-management' version '1.1.4'
 }
 
 group = 'com.example'
@@ -9,7 +9,6 @@ version = '0.0.1-SNAPSHOT'
 
 java {
     sourceCompatibility = '17'
-    targetCompatibility = '17'
 }
 
 configurations {
@@ -27,17 +26,36 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'mysql:mysql-connector-java:8.0.33'
-    implementation group: 'jakarta.persistence', name: 'jakarta.persistence-api', version: '3.2.0'
-    implementation 'jakarta.platform:jakarta.jakartaee-api:8.0.0'
+implementation 'jakarta.persistence:jakarta.persistence-api:3.1.0'
+    implementation 'org.hibernate.orm:hibernate-core:6.5.2.Final'
+    implementation 'org.apache.logging.log4j:log4j-api:2.23.1'
+    implementation 'org.apache.logging.log4j:log4j-core:2.23.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.1'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.compilerArgs += [
+        '--add-opens', 'java.base/java.util=ALL-UNNAMED',
+        '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
+        '--add-opens', 'java.base/java.lang.invoke=ALL-UNNAMED',
+        '--add-opens', 'java.prefs/java.util.prefs=ALL-UNNAMED',
+        '--add-opens', 'java.base/java.nio.charset=ALL-UNNAMED',
+        '--add-opens', 'java.base/java.net=ALL-UNNAMED',
+        '--add-opens', 'java.base/java.util.concurrent.atomic=ALL-UNNAMED'
+    ]
+}
+
+
 
 
 

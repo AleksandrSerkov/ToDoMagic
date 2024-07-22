@@ -1,11 +1,7 @@
-mysqld:
-  log_output: TABLE
 server:
-
   port: 8081
   servlet:
-    #context-path: /static
-
+    context-path: /
 logging:
   level:
     root: warn
@@ -30,9 +26,9 @@ logging:
 
 spring:
   datasource:
-    username: root
-    password: ytafhbfy
-    url: jdbc:mysql://localhost:3306/todomagic
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:ytafhbfy}
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/todomagic}
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       connection-timeout: 30000
@@ -51,3 +47,4 @@ spring:
           use_jdbc_metadata_defaults: false
   thymeleaf:
     check-template-location: false
+
